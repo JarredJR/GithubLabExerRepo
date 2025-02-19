@@ -1,0 +1,6 @@
+Line 1:I am amazing.
+Line 2: i'm just testig the code, that's all.
+Line 3: Programming relaxes the mind.
+Line 4: Let's have some fun.
+Line 5: relax and breath.
+Line 6: A cat is a cat.
