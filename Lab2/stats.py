@@ -1,51 +1,53 @@
-fileName = input("Enter the file name: ")
+def mean(numbers):
+    if not numbers: 
+        return 0
+    return sum(numbers) / len(numbers)
 
-try:
-    with open(fileName, 'r') as f:
-        content = f.read().split()
-
-    if not content:
-        print("The file is empty.")
+def median(numbers):
+    if not numbers:  
+        return 0
+    numbers.sort()
+    midpoint = len(numbers) // 2
+    if len(numbers) % 2 == 1:
+        return numbers[midpoint]
     else:
-        try:
-            numbers = [float(item) for item in content]
+        return (numbers[midpoint - 1] + numbers[midpoint]) / 2
+
+def mode(numbers):
+    if not numbers: 
+        return 0
+    frequency = {}
+    for number in numbers:
+        frequency[number] = frequency.get(number, 0) + 1
+    max_count = max(frequency.values())
+    mode = [key for key, value in frequency.items() if value == max_count]
+    if len(mode) == len(numbers):
+        return 0 
+    elif len(mode) == 1:
+        return mode[0] 
+    else:
+        return mode  
+
+def main():
+    file_name = input("Enter the file name: ")
+
+    try:
+        with open(file_name, 'r') as file:
+            numbers = []
+            for line in file:
+                words = line.split()
+                for word in words:
+                    try:
+                        numbers.append(float(word))
+                    except ValueError:
+                        continue  
+
             print("Numbers:", numbers)
+            print("Mean:", mean(numbers))
+            print("Median:", median(numbers))
+            print("Mode:", mode(numbers))
+    except FileNotFoundError:
+        print("File not found. Please check the file name and try again.")
 
-            mean = sum(numbers) / len(numbers) if numbers else 0
-            print("Mean:", mean)
-
-            numbers.sort()
-            midpoint = len(numbers) // 2
-            if len(numbers) % 2 == 1:
-                median = numbers[midpoint]
-            else:
-                median = (numbers[midpoint] + numbers[midpoint - 1]) / 2
-            print("Median:", median)
-
-            frequency = {}
-            for number in numbers:
-                frequency[number] = frequency.get(number, 0) + 1
-            max_count = max(frequency.values())
-            mode = [key for key, value in frequency.items() if value == max_count]
-            if len(mode) == len(numbers):
-                print("Mode: No mode")
-            else:
-                print("Mode:", mode)
-
-        except ValueError:
-            words = [item.lower() for item in content]
-            print("Words:", words)
-
-            frequency = {}
-            for word in words:
-                frequency[word] = frequency.get(word, 0) + 1
-            max_count = max(frequency.values())
-            mode = [key for key, value in frequency.items() if value == max_count]
-            if len(mode) == len(words):
-                print("Mode: No mode")
-            else:
-                print("Mode:", mode)
-
-except FileNotFoundError:
-    print("File not found. Please check the filename and try again.")
-
+if __name__ == "__main__":
+    main()
