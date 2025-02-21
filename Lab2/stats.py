@@ -1,56 +1,51 @@
-"""
-File: stats.py
-Computes the mean, median, and mode of a set of numbers or words.
-"""
+fileName = input("Enter the file name: ")
 
-def mean(numbers):
-    """Computes the mean of a list of numbers."""
-    if len(numbers) == 0:
-        return 0
-    return sum(numbers) / len(numbers)
+try:
+    with open(fileName, 'r') as f:
+        content = f.read().split()
 
-def median(numbers):
-    """Computes the median of a list of numbers."""
-    if len(numbers) == 0:
-        return 0
-    numbers.sort()
-    midpoint = len(numbers) // 2
-    if len(numbers) % 2 == 1:
-        return numbers[midpoint]
+    if not content:
+        print("The file is empty.")
     else:
-        return (numbers[midpoint] + numbers[midpoint - 1]) / 2
+        try:
+            numbers = [float(item) for item in content]
+            print("Numbers:", numbers)
 
-def mode(items):
-    """Computes the mode of a list of numbers or words."""
-    if len(items) == 0:
-        return 0
-    theDictionary = {}
-    for item in items:
-        theDictionary[item] = theDictionary.get(item, 0) + 1
-    
-    max_count = max(theDictionary.values())
-    mode = [key for key, value in theDictionary.items() if value == max_count]
+            mean = sum(numbers) / len(numbers) if numbers else 0
+            print("Mean:", mean)
 
-    if max_count > 1:
-        return mode
-    else:
-        return "No mode"
+            numbers.sort()
+            midpoint = len(numbers) // 2
+            if len(numbers) % 2 == 1:
+                median = numbers[midpoint]
+            else:
+                median = (numbers[midpoint] + numbers[midpoint - 1]) / 2
+            print("Median:", median)
 
-def main():
-    """Main function to test mean, median, and mode."""
-    user_input = input("Enter numbers or words separated by spaces: ")
-    items = user_input.split()
+            frequency = {}
+            for number in numbers:
+                frequency[number] = frequency.get(number, 0) + 1
+            max_count = max(frequency.values())
+            mode = [key for key, value in frequency.items() if value == max_count]
+            if len(mode) == len(numbers):
+                print("Mode: No mode")
+            else:
+                print("Mode:", mode)
 
-    # Check if input is all numbers
-    try:
-        numbers = [float(item) for item in items]
-        print("Numbers:", numbers)
-        print("Mean:", mean(numbers))
-        print("Median:", median(numbers))
-        print("Mode:", mode(numbers))
-    except ValueError:
-        print("Words:", items)
-        print("Mode:", mode(items))
+        except ValueError:
+            words = [item.lower() for item in content]
+            print("Words:", words)
 
-if __name__ == "__main__":
-    main()
+            frequency = {}
+            for word in words:
+                frequency[word] = frequency.get(word, 0) + 1
+            max_count = max(frequency.values())
+            mode = [key for key, value in frequency.items() if value == max_count]
+            if len(mode) == len(words):
+                print("Mode: No mode")
+            else:
+                print("Mode:", mode)
+
+except FileNotFoundError:
+    print("File not found. Please check the filename and try again.")
+
